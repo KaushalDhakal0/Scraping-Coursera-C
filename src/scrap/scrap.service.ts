@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 const fs = require('fs');
 import * as puppeteer from 'puppeteer';
-let csvData;
+let csvData:string;
 @Injectable()
 export class ScrapService {
 
@@ -78,7 +78,7 @@ export class ScrapService {
     const date = new Date().toISOString();
     fs.writeFileSync(`csvFile/data${date}.csv`, csvString);
   }
-  async extractPageData(page:any){
+  async extractPageData(page){
     const str:string = '.cds-71.css-0.cds-73.cds-grid-item.cds-118.cds-126.cds-138';
     await page?.waitForSelector(str);
     
@@ -141,6 +141,9 @@ export class ScrapService {
       return totalPages;
     },selector);
     return dta;
+  }
+  async createDownloadLink(id){
+    return  "ID";
   }
 }
 
