@@ -6,7 +6,6 @@ let csvData:string;
 export class ScrapService {
 
   async getDataViaPuppeteer(category: string = '') {
-    console.log("Start");
     let finalResult: {
       provider: string,
       title: string,
@@ -33,12 +32,12 @@ export class ScrapService {
       let totalPages = await this.getPageLimit(page); 
       while(true){
         //  await page.goto(`https://www.coursera.org/search?query=${category}&page=${totalPages}`);
-         totalPages = totalPages - 1;
          await page.waitForSelector("div .css-pn23ng .css-zl0kzj");
+         //extracting data from each page.
          const datatemp = await this.extractPageData(page);
          finalResult = [...finalResult, ...datatemp];
+         //clicks the next button
          await this.handleNext(page);
-        //  console.log("Final Result ===>",finalResult);
          const nextbtn = await page.$(".label-text.box.arrow.arrow-disabled");
         if (nextbtn) {
         // If there is  "Next" button disabled, we have reached the last page
@@ -48,21 +47,20 @@ export class ScrapService {
         }
       }
       await browser.close();
-      // console.log("All Data ==>",finalResult);
       await this.convertToCsv(finalResult);
       
 
     } catch (error) {
       console.log('Error occured===>', error);
     }
-    console.log("++++>>>><<<<<>>>>>>",finalResult);
+    console.log("All Data ==== ",finalResult);
   }
-  async handleNext(page){
+  async handleNext(page:any){
     const select:string ="button.label-text.box.arrow[aria-label='Next Page']";
     await page.waitForSelector(select);
-      await page.click(select);
+    await page.click(select);
   }
-  async convertToCsv(arr){
+  async convertToCsv(arr:any){
     const keys = Object.keys(arr[0]);
     // Create an array of strings that represents the CSV rows
     const csvRows = arr.map(item => {
@@ -78,11 +76,9 @@ export class ScrapService {
     const date = new Date().toISOString();
     fs.writeFileSync(`csvFile/data${date}.csv`, csvString);
   }
-  async extractPageData(page){
+  async extractPageData(page:any){
     const str:string = '.cds-71.css-0.cds-73.cds-grid-item.cds-118.cds-126.cds-138';
     await page?.waitForSelector(str);
-    
-    
     const pageData = await page?.evaluate((str:string)=>{
       let coursesLists: {
         provider: string;
@@ -131,7 +127,7 @@ export class ScrapService {
     // console.log("============>Strrr",pageData);
     return pageData;
   }
-  async getPageLimit(page){
+  async getPageLimit(page:any){
     const selector = ".pagination-controls-container > button";
     await page.waitForSelector(selector);
     const dta = await page.evaluate((selector)=>{
@@ -141,9 +137,6 @@ export class ScrapService {
       return totalPages;
     },selector);
     return dta;
-  }
-  async createDownloadLink(id){
-    return  "ID";
   }
 }
 

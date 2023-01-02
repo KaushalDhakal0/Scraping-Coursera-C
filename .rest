@@ -1,7 +1,7 @@
 # GET  http://localhost:3000
 
-
+#scrap Courses by category route
 # GET  http://localhost:3000/courses?query=DataScience
 
-
-PUT http://localhost:3000/courses/
+#Download csv file route
+GET http://localhost:3000/courses/54
