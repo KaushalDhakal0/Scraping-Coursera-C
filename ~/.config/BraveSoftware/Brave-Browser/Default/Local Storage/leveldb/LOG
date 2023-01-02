@@ -1,3 +1,5 @@
-2023/01/02-21:03:21.887 3 Reusing MANIFEST /home/kaushal/Desktop/assignment/scraping-api/~/.config/BraveSoftware/Brave-Browser/Default/Local Storage/leveldb/MANIFEST-000001
-2023/01/02-21:03:21.888 3 Recovering log #4
-2023/01/02-21:03:21.888 3 Reusing old log /home/kaushal/Desktop/assignment/scraping-api/~/.config/BraveSoftware/Brave-Browser/Default/Local Storage/leveldb/000004.log 
+2023/01/02-23:17:43.718 3 Reusing MANIFEST /home/kaushal/Desktop/assignment/scraping-api/~/.config/BraveSoftware/Brave-Browser/Default/Local Storage/leveldb/MANIFEST-000001
+2023/01/02-23:17:43.725 3 Recovering log #7
+2023/01/02-23:17:43.725 3 Level-0 table #9: started
+2023/01/02-23:17:43.737 3 Level-0 table #9: 19554 bytes OK
+2023/01/02-23:17:43.749 3 Delete type=0 #7

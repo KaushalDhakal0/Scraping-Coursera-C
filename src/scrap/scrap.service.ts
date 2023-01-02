@@ -7,9 +7,13 @@ export class ScrapService {
 
   async getDataViaPuppeteer(category: string = '') {
     console.log("Start");
-    
-    let finalResult = [];
-  //  let pageNo =1;
+    let finalResult: {
+      provider: string,
+      title: string,
+      tags: string,
+      rating: string,
+      reviews: string,
+    }[] = [];;
     try {
       const URL = `https://www.coursera.org/search?query=${category}`;
       const browser = await puppeteer.launch({
@@ -26,7 +30,7 @@ export class ScrapService {
         '.cds-71.css-0.cds-73.cds-grid-item.cds-118.cds-126.cds-138';
         
       await page.waitForSelector(selectorStr);
-      let totalPages = await this.getPageLimit(page);
+      let totalPages = await this.getPageLimit(page); 
       while(true){
         //  await page.goto(`https://www.coursera.org/search?query=${category}&page=${totalPages}`);
          totalPages = totalPages - 1;
@@ -34,7 +38,7 @@ export class ScrapService {
          const datatemp = await this.extractPageData(page);
          finalResult = [...finalResult, ...datatemp];
          await this.handleNext(page);
-         console.log("Final Result ===>",finalResult);
+        //  console.log("Final Result ===>",finalResult);
          const nextbtn = await page.$(".label-text.box.arrow.arrow-disabled");
         if (nextbtn) {
         // If there is  "Next" button disabled, we have reached the last page
@@ -44,56 +48,19 @@ export class ScrapService {
         }
       }
       await browser.close();
-      console.log("All Data ==>",finalResult);
-      
-      
-      // (async ()=>{
-      //   // let finalResult = [];
-      //   for (let i = 0; i <= totalPages; i++) {
-      //     console.log("Breaks on which loop==>",i);
-      //     let dataEachPage = [];
-      //     if(i == totalPages){
-      //       dataEachPage = await this.extractPageData(page);
-      //       finalResult = [...finalResult, ...dataEachPage];
-      //     }else{
-      //       dataEachPage = await this.extractPageData(page);
-      //       finalResult = [...finalResult, ...dataEachPage];
-      //       console.log(finalResult);
-
-      //       await page.waitForSelector("button.label-text.box.arrow[aria-label='Next Page']");
-      //       // await page.waitForSelector(".cds-71.css-0.cds-73.cds-grid-item.cds-118.cds-126.cds-138");
-            
-      //       // setTimeout(async()=>{
-      //         await this.handleNext(page);
-      //       // },5000);
-      //     }
-
-      //   }
-      //   await this.convertToCsv(finalResult);
-        
-      // })(); 
-      // console.log("All Datata====>",arr);
-      // await this.convertToCsv(arr);
-      // console.log("Final datatatata==>",data);
+      // console.log("All Data ==>",finalResult);
+      await this.convertToCsv(finalResult);
       
 
     } catch (error) {
       console.log('Error occured===>', error);
     }
-    // console.log("++++>>>><<<<<>>>>>>",finalResult);
-    
-    
+    console.log("++++>>>><<<<<>>>>>>",finalResult);
   }
   async handleNext(page){
     const select:string ="button.label-text.box.arrow[aria-label='Next Page']";
     await page.waitForSelector(select);
-    // const next = await page.evaluate(async (select:string)=>{
-      // const nextPage = document.querySelectorAll(select)[1] as HTMLElement | null;  
-      // nextPage.click();
-      // await page.waitForNavigation();
       await page.click(select);
-      // return "";
-    // },select);
   }
   async convertToCsv(arr){
     const keys = Object.keys(arr[0]);
@@ -107,7 +74,9 @@ export class ScrapService {
     csvRows.unshift(keys.join(","));
     const csvString = csvRows.join("\n");
     // Write the CSV string to a file
-    fs.writeFileSync("data.csv", csvString);
+    //create unique file name. UUID will be a better option
+    const date = new Date().toISOString();
+    fs.writeFileSync(`csvFile/data${date}.csv`, csvString);
   }
   async extractPageData(page:any){
     const str:string = '.cds-71.css-0.cds-73.cds-grid-item.cds-118.cds-126.cds-138';
@@ -115,7 +84,6 @@ export class ScrapService {
     
     
     const pageData = await page?.evaluate((str:string)=>{
-      console.log("I'm here");
       let coursesLists: {
         provider: string;
         title: string;

@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, Param ,Put} from '@nestjs/common';
 import { ScrapService } from './scrap.service';
 @Controller('/courses')
 export class ScrapController {
@@ -6,8 +6,11 @@ export class ScrapController {
 
   @Get()
   findAll(@Query() query: { category: string }): any {
-    // console.log(query);
-    // return "HELLO Course";
     return this.scrapService.getDataViaPuppeteer(query.category);
   }
+  @Put(':id')
+  update(@Param('id') id: string) {
+    return `This action updates a user with ID: ${id}`;
+  }
 }
+

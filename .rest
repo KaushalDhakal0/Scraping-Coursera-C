@@ -1,0 +1,7 @@
+# GET  http://localhost:3000
+
+
+# GET  http://localhost:3000/courses?query=DataScience
+
+
+PUT http://localhost:3000/courses/
