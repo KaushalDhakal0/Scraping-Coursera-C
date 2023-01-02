@@ -6,7 +6,7 @@ export class ScrapController {
 
   @Get()
   findAll(@Query() query: { category: string }): any {
-    console.log(query);
+    // console.log(query);
     // return "HELLO Course";
     return this.scrapService.getDataViaPuppeteer(query.category);
   }

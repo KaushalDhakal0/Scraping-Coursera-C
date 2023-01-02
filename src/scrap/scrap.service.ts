@@ -37,6 +37,8 @@ export class ScrapService {
             // console.log("Data=======>",dataEachPage);
             finalResult = finalResult?.concat(dataEachPage);
             await page.goto(`https://www.coursera.org/search?query=${category}&page=${i + 1}$&index=prod_all_launched_products_term_optimization`);
+            await page.waitForSelector(".cds-71.css-0.cds-73.cds-grid-item.cds-118.cds-126.cds-138");
+            // await page.wait
             // await page.click("button.label-text.box.arrow[aria-label='Next Page']");
             // await this.handleNext(page);
           }
@@ -116,16 +118,16 @@ export class ScrapService {
                         const tags1 = temp2.querySelector("div p")?.innerHTML || "";
                         const rating1 = requiredSquare.querySelector("div .css-pn23ng .css-zl0kzj")?.textContent || "";
                         const reviews1 = requiredSquare.querySelector("div .css-pn23ng .css-14d8ngk")?.textContent || "";                                                                                                                      
-                        temp.provider = top || "";
-                        temp.title = title || "";
+                        temp.provider = top || "Unknown";
+                        temp.title = title || "Title";
                         temp.tags = tags1.slice(tags1.indexOf("</span>")).slice(7).split(",").join("&") || "";
-                        temp.rating = rating1 || "";
-                        temp.reviews = reviews1 || "";
+                        temp.rating = rating1 || "3";
+                        temp.reviews = reviews1 || "20";
                         coursesLists.push(temp); 
                       });
       return coursesLists;
     },str);
-    // console.log("============>Strrr",pageData);
+    console.log("============>Strrr",pageData);
     return pageData;
   }
   async getPageLimit(page){
